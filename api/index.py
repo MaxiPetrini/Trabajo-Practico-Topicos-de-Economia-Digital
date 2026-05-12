@@ -809,7 +809,7 @@ def fetch_news(ticker: str) -> dict:
   return result
 
 
-class RequestHandler(BaseHTTPRequestHandler):
+class handler(BaseHTTPRequestHandler):
     def _send_json(self, payload: dict, status: int = 200) -> None:
         body = json.dumps(payload, ensure_ascii=True).encode("utf-8")
         try:
@@ -2585,5 +2585,3 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         return
-
-handler = RequestHandler
