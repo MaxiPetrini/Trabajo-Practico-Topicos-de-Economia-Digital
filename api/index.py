@@ -1,4 +1,19 @@
 from __future__ import annotations
+
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import json
+import os
+import random
+import re
+import socketserver
+import time
+import urllib.parse
+import urllib.request
+from datetime import datetime, timedelta, timezone
+
+from deep_translator import GoogleTranslator
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
 # Finnhub API key
 FINNHUB_KEY = "d7v00lhr01qp7l70gsk0d7v00lhr01qp7l70gskg"
 
@@ -92,7 +107,6 @@ def fetch_general_market_news() -> list[dict]:
   except Exception as e:
     print(f"⚠️ Error al consultar noticias generales: {type(e).__name__}: {e}", file=__import__('sys').stderr)
     return []
-import random
 USER_AGENTS = [
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
@@ -102,20 +116,7 @@ USER_AGENTS = [
 def get_headers():
   return {"User-Agent": random.choice(USER_AGENTS)}
 
-import json
-import os
-import re
-import socketserver
-import time
-import urllib.parse
-import urllib.request
-from datetime import datetime, timedelta, timezone
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-
-from deep_translator import GoogleTranslator
-
 # Sentiment analysis
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 # Inicializar el analizador una sola vez
 sentiment_analyzer = SentimentIntensityAnalyzer()
@@ -2584,16 +2585,5 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         return
-
-
-def main() -> None:
-    socketserver.TCPServer.allow_reuse_address = True
-    with ThreadingHTTPServer((HOST, PORT), RequestHandler) as server:
-        print(f"App disponible en http://{HOST}:{PORT}")
-        try:
-            server.serve_forever()
-        except KeyboardInterrupt:
-            print("\nServidor detenido.")
-
 
 handler = RequestHandler
