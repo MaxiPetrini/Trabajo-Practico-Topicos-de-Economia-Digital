@@ -1543,10 +1543,13 @@ class handler(BaseHTTPRequestHandler):
       display: flex;
       gap: 40px;
       width: max-content;
+      min-width: max-content;
+      white-space: nowrap;
+      flex-wrap: nowrap;
       will-change: transform;
       transform: translateZ(0); /* Fuerza el uso de la placa de video */
       backface-visibility: hidden;
-      animation: scroll-left 52s linear infinite;
+      animation: scroll-left 30s linear infinite;
     }
 
     @media (max-width: 780px) {
@@ -1844,34 +1847,36 @@ class handler(BaseHTTPRequestHandler):
         transform: translateX(0);
       }
       
-      /* Panel de Favoritos (Sube desde abajo) */
+      /* Panel de Favoritos (Lateral en móvil) */
       .favorites-panel {
-        width: 100%;
-        border-left: none;
-        top: auto;
+        width: 85%;
+        max-width: 320px;
+        top: var(--ticker-height);
         bottom: 0;
-        height: 75vh;
-        /* Se oculta empujándolo hacia abajo, dejando ver solo los 50px de la pestaña */
-        transform: translateY(calc(100% - 50px));
+        right: 0;
+        left: auto;
+        border-left: 1px solid var(--border);
+        height: auto;
+        transform: translateX(100%);
       }
       .favorites-panel.open {
-        transform: translateY(0);
+        transform: translateX(0);
       }
       .favorites-handle {
-        left: 0;
-        right: 0;
-        top: 0;
-        width: 100%;
-        height: 50px;
-        border-radius: 20px 20px 0 0;
-        writing-mode: horizontal-tb;
-        transform: none;
-        border-left: 1px solid var(--border);
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        left: -42px;
+        right: auto;
+        top: 40px;
+        width: 42px;
+        height: 220px;
+        border-left: none;
+        border-radius: 0 12px 12px 0;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        box-shadow: 4px -4px 12px rgba(0, 0, 0, 0.05);
       }
       .favorites-content {
-        margin-top: 50px;
-        height: calc(100% - 50px);
+        margin-top: 0;
+        height: 100%;
       }
     }
 
@@ -2641,6 +2646,15 @@ class handler(BaseHTTPRequestHandler):
         }
       }
     });
+
+    function cerrarNoticia() {
+      const modal = document.getElementById('modal-noticias');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    window.cerrarNoticia = cerrarNoticia;
   </script>
 </body>
 </html>"""
