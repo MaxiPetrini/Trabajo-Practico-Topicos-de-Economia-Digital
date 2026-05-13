@@ -2019,7 +2019,7 @@ class handler(BaseHTTPRequestHandler):
     const quoteContainer = document.getElementById('quote-container');
     const tickerMenu = document.getElementById('ticker-menu');
     const themeToggle = document.getElementById('theme-toggle');
-    const TRENDING_TICKERS = ['BTC', 'AAPL', 'GGAL', 'NVDA', 'TSLA'];
+    const TRENDING_TICKERS = ['BTC', 'AAPL', 'META', 'NVDA', 'TSLA'];
     const MAX_HISTORY = 3;
     const HISTORY_KEY = 'notiYa_search_history';
     const THEME_KEY = 'notiYa_theme';
