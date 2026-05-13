@@ -1479,9 +1479,11 @@ class handler(BaseHTTPRequestHandler):
       animation-play-state: running;
     }
 
-    /* Pausar la cinta solo cuando el usuario pasa el mouse para leer */
-    .ticker-tape:hover .ticker-tape-container {
-      animation-play-state: paused;
+    /* Pausar la cinta solo en escritorio. En móvil el "toque" lo pausaba para siempre. */
+    @media (hover: hover) and (pointer: fine) {
+      .ticker-tape:hover .ticker-tape-container {
+        animation-play-state: paused;
+      }
     }
 
     .ticker-item {
@@ -1833,19 +1835,43 @@ class handler(BaseHTTPRequestHandler):
     }
 
     @media (max-width: 950px) {
+      /* Panel Izquierdo */
+      .left-drawer {
+        width: 85%;
+        max-width: 320px;
+      }
+      .left-drawer.open {
+        transform: translateX(0);
+      }
+      
+      /* Panel de Favoritos (Sube desde abajo) */
       .favorites-panel {
         width: 100%;
         border-left: none;
+        top: auto;
+        bottom: 0;
+        height: 75vh;
+        /* Se oculta empujándolo hacia abajo, dejando ver solo los 50px de la pestaña */
+        transform: translateY(calc(100% - 50px));
+      }
+      .favorites-panel.open {
+        transform: translateY(0);
       }
       .favorites-handle {
-        left: auto;
+        left: 0;
         right: 0;
-        top: calc(100vh - 60px);
+        top: 0;
         width: 100%;
         height: 50px;
         border-radius: 20px 20px 0 0;
         writing-mode: horizontal-tb;
         transform: none;
+        border-left: 1px solid var(--border);
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      }
+      .favorites-content {
+        margin-top: 50px;
+        height: calc(100% - 50px);
       }
     }
 
@@ -2577,6 +2603,44 @@ class handler(BaseHTTPRequestHandler):
 
     // Actualizar cotizaciones de favoritos cada 5 minutos para evitar bloqueos
     setInterval(renderFavoritesPanel, 300000);
+
+    // =============================================
+    // CONTROL TÁCTIL PARA PANELES (MÓVIL)
+    // =============================================
+    const leftDrawerMobile = document.querySelector('.left-drawer');
+    const leftHandleMobile = document.querySelector('.drawer-handle');
+    const favPanelMobile = document.getElementById('favorites-panel');
+    const favHandleMobile = document.querySelector('.favorites-handle');
+
+    // Abrir/Cerrar Noticias Globales
+    leftHandleMobile.addEventListener('click', (e) => {
+      if (window.innerWidth <= 950) {
+        e.stopPropagation();
+        leftDrawerMobile.classList.toggle('open');
+        favPanelMobile.classList.remove('open'); // Cierra el otro por si acaso
+      }
+    });
+
+    // Abrir/Cerrar Favoritos
+    favHandleMobile.addEventListener('click', (e) => {
+      if (window.innerWidth <= 950) {
+        e.stopPropagation();
+        favPanelMobile.classList.toggle('open');
+        leftDrawerMobile.classList.remove('open'); // Cierra el otro por si acaso
+      }
+    });
+
+    // Cerrar paneles al tocar cualquier parte fuera de ellos
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 950) {
+        if (!leftDrawerMobile.contains(e.target)) {
+          leftDrawerMobile.classList.remove('open');
+        }
+        if (!favPanelMobile.contains(e.target)) {
+          favPanelMobile.classList.remove('open');
+        }
+      }
+    });
   </script>
 </body>
 </html>"""
