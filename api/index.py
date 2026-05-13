@@ -1587,8 +1587,15 @@ class handler(BaseHTTPRequestHandler):
       display: flex;
     }
 
-    .left-drawer:hover {
-      transform: translateX(0);
+    /* Los paneles solo se abren al pasar el mouse en computadoras.
+       En celulares dependerán exclusivamente del toque (JavaScript) */
+    @media (hover: hover) and (pointer: fine) {
+      .left-drawer:hover {
+        transform: translateX(0);
+      }
+      .favorites-panel:hover {
+        transform: translateX(0);
+      }
     }
 
     .drawer-handle {
@@ -1646,11 +1653,6 @@ class handler(BaseHTTPRequestHandler):
       flex-direction: column;
       transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* El panel solo se abre cuando le pasás el mouse por encima */
-    .favorites-panel:hover {
-      transform: translateX(0);
     }
 
     .favorites-handle {
